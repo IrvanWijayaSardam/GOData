@@ -13,6 +13,14 @@ import (
 	"github.com/go-chi/chi"
 )
 
+type HandlerClient interface {
+	Fetch(w http.ResponseWriter, r *http.Request)
+	GetByID(w http.ResponseWriter, r *http.Request)
+	Create(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+}
+
 func NewPostHandler(db *driver.DB) *Post {
 	return &Post{
 		repo: post.NewSQLPostRepo(db.SQL),

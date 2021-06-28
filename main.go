@@ -32,8 +32,8 @@ func main() {
 		rt.Mount("/post", postRouter(pHandler))
 	})
 
-	fmt.Println("Server Listen at : 8007")
-	http.ListenAndServe(":8005", r)
+	fmt.Println("Server Listen at : 8006")
+	http.ListenAndServe(":8006", r)
 }
 
 func postRouter(pHandler *ph.Post) http.Handler {

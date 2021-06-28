@@ -50,11 +50,10 @@ func (r *Post) Fetch(ctx context.Context, num int64) ([]*models.Post, error) {
 	return r.fetch(ctx, query, num)
 }
 
-func (r *Post) GetByID(ctx context.Context, id int64) (*models.Post, error) {
-	query := "SELECT id, title, Content FROM posts WHERE id =?"
+func (m *Post) GetByID(ctx context.Context, id int64) (*models.Post, error) {
+	query := "Select id, title, content From posts where id=?"
 
-	rows, err := r.fetch(ctx, query, id)
-
+	rows, err := m.fetch(ctx, query, id)
 	if err != nil {
 		return nil, err
 	}
