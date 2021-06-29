@@ -31,65 +31,67 @@ type Post struct {
 	repo repository.PostRepo
 }
 
-func (h *Post) Fetch(w http.ResponseWriter, r *http.Request) {
-	payload, _ := h.repo.Fetch(r.Context(), 5)
+func (p *Post) Fetch(w http.ResponseWriter, r *http.Request) {
+	payload, _ := p.repo.Fetch(r.Context(), 5)
 
 	respondwithJSON(w, http.StatusOK, payload)
 }
 
-func (h *Post) Create(w http.ResponseWriter, r *http.Request) {
+// Create a new post
+func (p *Post) Create(w http.ResponseWriter, r *http.Request) {
 	post := models.Post{}
 	json.NewDecoder(r.Body).Decode(&post)
 
-	newID, err := h.repo.Create(r.Context(), &post)
+	newID, err := p.repo.Create(r.Context(), &post)
 	fmt.Println(newID)
-
 	if err != nil {
 		fmt.Println(err)
 		respondWithError(w, http.StatusInternalServerError, "Server Error")
 		return
 	}
 
-	respondwithJSON(w, http.StatusCreated, map[string]string{"message": "Succesfully Created"})
-
+	respondwithJSON(w, http.StatusCreated, map[string]string{"message": "Successfully Created"})
 }
-func (h *Post) Update(w http.ResponseWriter, r *http.Request) {
+
+// Update a post by id
+func (p *Post) Update(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
 	data := models.Post{ID: int64(id)}
 	json.NewDecoder(r.Body).Decode(&data)
-	payload, err := h.repo.Update(r.Context(), &data)
+	payload, err := p.repo.Update(r.Context(), &data)
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Server Error")
 	}
 
 	respondwithJSON(w, http.StatusOK, payload)
-
 }
 
-func (h *Post) GetByID(w http.ResponseWriter, r *http.Request) {
+// GetByID returns a post details
+func (p *Post) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
-	payload, err := h.repo.GetByID(r.Context(), int64(id))
+	payload, err := p.repo.GetByID(r.Context(), int64(id))
 
 	if err != nil {
-		respondWithError(w, http.StatusNoContent, "Content Not Found")
+		respondWithError(w, http.StatusNoContent, "Content not found")
 	}
 
 	respondwithJSON(w, http.StatusOK, payload)
-
 }
-func (h *Post) Delete(w http.ResponseWriter, r *http.Request) {
+
+// Delete a post
+func (p *Post) Delete(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
-	_, err := h.repo.Delete(r.Context(), int64(id))
+	_, err := p.repo.Delete(r.Context(), int64(id))
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Server Error")
 	}
 
-	respondwithJSON(w, http.StatusMovedPermanently, map[string]string{"message": "Delete Succesfully"})
-
+	respondwithJSON(w, http.StatusMovedPermanently, map[string]string{"message": "Delete Successfully"})
 }
 
+// respondwithJSON write json response format
 func respondwithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 
@@ -98,6 +100,7 @@ func respondwithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
+// respondwithError return error message
 func respondWithError(w http.ResponseWriter, code int, msg string) {
-	respondwithJSON(w, code, map[string]string{"Message": msg})
+	respondwithJSON(w, code, map[string]string{"message": msg})
 }
