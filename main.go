@@ -29,7 +29,7 @@ func main() {
 
 	pHandler := ph.NewPostHandler(connection)
 	r.Route("/", func(rt chi.Router) {
-		rt.Mount("/post", postRouter(pHandler))
+		rt.Mount("/user", postRouter(pHandler))
 	})
 
 	fmt.Println("Server Listen at : 8006")

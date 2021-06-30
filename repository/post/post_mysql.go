@@ -32,8 +32,11 @@ func (r *Post) fetch(ctx context.Context, query string, args ...interface{}) ([]
 
 		err := rows.Scan(
 			&data.ID,
-			&data.Title,
-			&data.Content,
+			&data.Firstname,
+			&data.Lastname,
+			&data.Email,
+			&data.Password,
+			&data.Telp,
 		)
 		if err != nil {
 			return nil, err
@@ -45,13 +48,13 @@ func (r *Post) fetch(ctx context.Context, query string, args ...interface{}) ([]
 }
 
 func (r *Post) Fetch(ctx context.Context, num int64) ([]*models.Post, error) {
-	query := "Select id, title, content From posts limit ?"
+	query := "SELECT id, firstname, lastname, email, password, telp FROM user limit ?"
 
 	return r.fetch(ctx, query, num)
 }
 
 func (r *Post) GetByID(ctx context.Context, id int64) (*models.Post, error) {
-	query := "Select id, title, content From posts where id=?"
+	query := "SELECT id, firstname, lastname, email, password, telp FROM user where id=?"
 
 	rows, err := r.fetch(ctx, query, id)
 	if err != nil {
@@ -69,17 +72,17 @@ func (r *Post) GetByID(ctx context.Context, id int64) (*models.Post, error) {
 	return payload, nil
 }
 func (r *Post) Create(ctx context.Context, p *models.Post) (int64, error) {
-	query := "Insert into posts SET title=?, content=?"
+	query := "INSERT INTO user SET firstname=?, lastname=?, email=?, password =?, telp=?"
 
 	stmt, err := r.db.PrepareContext(ctx, query)
 	if err != nil {
 		return -1, err
 	}
 
-	res, err := stmt.ExecContext(ctx, p.Title, p.Content)
+	res, err := stmt.ExecContext(ctx, p.Firstname, p.Lastname, p.Email, p.Password, p.Telp)
 	defer stmt.Close()
 
-	fmt.Println(p.Title, p.Content)
+	fmt.Println(p.Firstname, p.Lastname, p.Email, p.Password, p.Telp)
 	if err != nil {
 		return -1, err
 	}
@@ -87,7 +90,7 @@ func (r *Post) Create(ctx context.Context, p *models.Post) (int64, error) {
 	return res.LastInsertId()
 }
 func (r *Post) Update(ctx context.Context, p *models.Post) (*models.Post, error) {
-	query := "UPDATE posts SET title=?, content=? where id=?"
+	query := "UPDATE user SET firstname=?, lastname=?, email=?, password=?, telp=? WHERE id=?"
 
 	stmt, err := r.db.PrepareContext(ctx, query)
 	if err != nil {
@@ -96,8 +99,11 @@ func (r *Post) Update(ctx context.Context, p *models.Post) (*models.Post, error)
 
 	_, err = stmt.ExecContext(
 		ctx,
-		p.Title,
-		p.Content,
+		p.Firstname,
+		p.Lastname,
+		p.Email,
+		p.Password,
+		p.Telp,
 		p.ID,
 	)
 	if err != nil {
@@ -109,7 +115,7 @@ func (r *Post) Update(ctx context.Context, p *models.Post) (*models.Post, error)
 
 }
 func (r *Post) Delete(ctx context.Context, id int64) (bool, error) {
-	query := "DELETE FROM posts WHERE id=?"
+	query := "DELETE FROM user WHERE id=?"
 
 	stmt, err := r.db.PrepareContext(ctx, query)
 	if err != nil {
