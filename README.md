@@ -28,8 +28,20 @@ CREATE TABLE `posts` (
 
 #API ENDPOINT 
 CREATE : 
-        /POST
+        POST /user/
         {
-                "title" : "Your Title",
-                "Content" : "Your Content"
+        "firstname" : "john",
+        "lastname" : "doe",
+        "email" : "johndoe@gmail.com",
+        "password" : "johndoepass",
+        "telp" : "0929382983"
+        }
+        GET /user/{id}
+        {
+            "id": 32,
+            "firstname": "Test",
+            "lastname": "New",
+            "email": "newtest@gmail.com",
+            "password": "testest",
+            "telp": "08318293823"
         }
