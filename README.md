@@ -26,8 +26,8 @@ CREATE TABLE `posts` (
         go run main.go
 
 
-#API ENDPOINT 
-CREATE : 
+#API ENDPOINT : 
+        
         POST /user/
         {
         "firstname" : "john",
