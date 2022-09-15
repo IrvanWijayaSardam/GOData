@@ -54,3 +54,4 @@ CREATE TABLE `posts` (
             "password": "Updated",
             "telp": "08283782732"
         }
+        DELETE /user/{id}
