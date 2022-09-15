@@ -45,3 +45,12 @@ CREATE TABLE `posts` (
             "password": "testest",
             "telp": "08318293823"
         }
+        PUT /user/{id}
+        {
+            "id": 32,
+            "firstname": "Updated",
+            "lastname": "Updated",
+            "email": "Updated@gmail.com",
+            "password": "Updated",
+            "telp": "08283782732"
+        }
